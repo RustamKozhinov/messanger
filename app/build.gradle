@@ -48,9 +48,8 @@ dependencies {
 
 
 // fonts
-    implementation 'com.mikepenz:google-material-typeface:x.y.z@aar' //Google Material Icons
-    implementation 'com.mikepenz:fontawesome-typeface:x.y.z@aar'     //FontAwesome
-    implementation "com.mikepenz:materialdrawer:7.0.0"i
+
+    implementation "com.mikepenz:materialdrawer:7.0.0"
     implementation "com.mikepenz:materialdrawer-nav:7.0.0"
     implementation "com.mikepenz:materialdrawer-iconics:7.0.0"
 }
