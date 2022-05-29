@@ -113,6 +113,8 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     drawerItem: IDrawerItem<*>
                 ): Boolean {
+                    //переход по позиции, когда нажимаем на элемент он переходит к следующему фрагменту
+                    //при нажатии кнопки назад переходит в предыдущий фрагмент
                     when (position) {
                         7 ->  supportFragmentManager.beginTransaction()
                             .addToBackStack(null)
