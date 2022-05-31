@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/ThemeOverlay.AppCompat">
         <activity
+            android:name=".activities.RegisterActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:exported="false"
+            android:label="@string/title_activity_register"
+            android:theme="@style/NoActionBar" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
