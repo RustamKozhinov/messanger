@@ -9,32 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.template.telegramm.R
+import com.template.telegramm.utillits.AppTextWatcher
+import com.template.telegramm.utillits.showToast
 import kotlinx.android.synthetic.main.fragment_enter_code.*
 
 
 class EnterCodeFragment : Fragment(R.layout.fragment_enter_code) {
     override fun onStart() {
         super.onStart()
-        register_input_code.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val string = register_input_code.text.toString()
-                if (string.length == 6 ){
-                    verifyCode()
-                }
+        register_input_code.addTextChangedListener(AppTextWatcher {
+            val string = register_input_code.text.toString()
+            if (string.length == 6) {
+                verifyCode()
             }
-
-            private fun verifyCode() {
-                Toast.makeText(activity,"введите код!", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
         })
-
+    }
+    private fun verifyCode() {
+        showToast("Ok")
     }
 }

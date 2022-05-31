@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.template.telegramm.R
+import com.template.telegramm.utillits.replaceFragment
+import com.template.telegramm.utillits.showToast
 import kotlinx.android.synthetic.main.fragment_enter_phone.*
 
 
@@ -19,12 +21,10 @@ class EnterPhoneFragment : Fragment(R.layout.fragment_enter_phone) {
 
     private fun sendCode() {
         if(register_input_phone_number.text.toString().isEmpty()) {
-            Toast.makeText(activity,"введите номер телефона!",Toast.LENGTH_SHORT).show()
+            showToast("введите номер телефона!")
         }else {
-            fragmentManager?.beginTransaction()
-                ?.replace(R.id.dataContainer,EnterCodeFragment())
-                ?.addToBackStack(null)
-                ?.commit()
+            replaceFragment(EnterCodeFragment())
+
         }
     }
 }

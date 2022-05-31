@@ -13,6 +13,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.template.telegramm.R
 import com.template.telegramm.ui.fragments.SettingsFragment
+import com.template.telegramm.utillits.replaceFragment
 
 class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
 
@@ -95,9 +96,7 @@ class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
                     //переход по позиции, когда нажимаем на элемент он переходит к следующему фрагменту
                     //при нажатии кнопки назад переходит в предыдущий фрагмент
                     when (position) {
-                        7 -> mainActivity.supportFragmentManager.beginTransaction()
-                            .addToBackStack(null)
-                            .replace(R.id.dataContainer, SettingsFragment()).commit()
+                        7 -> mainActivity.replaceFragment(SettingsFragment())
                     }
                     return false
                 }

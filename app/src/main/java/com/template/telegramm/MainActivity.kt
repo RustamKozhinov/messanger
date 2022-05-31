@@ -8,6 +8,8 @@ import com.template.telegramm.activities.RegisterActivity
 import com.template.telegramm.databinding.ActivityMainBinding
 import com.template.telegramm.ui.fragments.ChatsFragment
 import com.template.telegramm.ui.objects.AppDrawer
+import com.template.telegramm.utillits.replaceActivity
+import com.template.telegramm.utillits.replaceFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,14 +34,10 @@ class MainActivity : AppCompatActivity() {
         if (false) {
             setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.dataContainer,
-                    ChatsFragment()
-                ).commit()
+            replaceFragment(ChatsFragment())
         }else {
             //переход к окну регистрации пользователя
-            val intent = Intent(this,RegisterActivity::class.java)
-            startActivity(intent)
+            replaceActivity(RegisterActivity())
         }
 
 
