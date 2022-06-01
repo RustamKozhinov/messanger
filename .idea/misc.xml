@@ -11,12 +11,14 @@
         <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/drawable/ripple_effect.xml" value="0.1" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/layout/activity_registe1.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/layout/fragment_change_name.xml" value="0.175" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/layout/fragment_chats.xml" value="0.1" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/layout/fragment_enter_code.xml" value="0.10885416666666667" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/layout/fragment_enter_phone.xml" value="0.1" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/layout/fragment_second2.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/layout/fragment_settings.xml" value="0.1" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/menu/settings_action_menu.xml" value="0.1" />
+        <entry key="..\:/Users/Acer/AndroidStudioProjects/telegramm/app/src/main/res/menu/settings_menu_confirm.xml" value="0.175" />
       </map>
     </option>
   </component>
