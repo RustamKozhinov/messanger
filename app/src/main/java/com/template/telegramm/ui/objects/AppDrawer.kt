@@ -3,6 +3,7 @@ package com.template.telegramm.ui.objects
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -19,10 +20,32 @@ class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
 
     private lateinit var mDrawer: Drawer
     private lateinit var mHeader: AccountHeader
+    private lateinit var mDrawerLayout: DrawerLayout
 
     fun create() {
         createDrawer()
         createHeader()
+        mDrawerLayout = mDrawer.drawerLayout
+    }
+
+    //отключает боковое меню когда мы из главного фрагмента переходим в другой фрагмент
+    fun disableDrawer() {
+        mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false//выключаем гамургер
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)//включаем гамбургер
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)//устанавливает в каком режиме установить гамбургер
+        toolbar.setNavigationOnClickListener{
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+    }
+
+    //включает боковое меню когда мы переходим из другого фрагмента в главный
+    fun enableDrawer() {
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false) //включаем гамбургер
+        mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = true //выключаем гамургер
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED) //устанавливает в каком режиме установить гамбургер
+        toolbar.setNavigationOnClickListener{
+            mDrawer.openDrawer()
+        }
     }
 
     //Выдвежное меню,здесь создаем иконки и заголовки используя библиотеку mikepenz
