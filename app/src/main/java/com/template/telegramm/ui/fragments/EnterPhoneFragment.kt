@@ -26,11 +26,11 @@ class EnterPhoneFragment : Fragment(R.layout.fragment_enter_phone) {
         mCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             //проверяет есть ли верефикация если все ок то он запускается, ореентирован для реального телефона
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                AUTH.signInWithCredential(credential).addOnCompleteListener{
+                AUTH.signInWithCredential(credential).addOnCompleteListener {
                     if (it.isSuccessful) {
                         showToast("welcome")
                         (activity as RegisterActivity).replaceActivity(MainActivity())
-                    }else {
+                    } else {
                         showToast(it.exception?.message.toString())
                     }
                 }

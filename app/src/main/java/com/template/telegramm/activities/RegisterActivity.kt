@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import com.template.telegramm.R
 import com.template.telegramm.databinding.ActivityRegisterBinding
 import com.template.telegramm.ui.fragments.EnterPhoneFragment
+import com.template.telegramm.utillits.initFirebase
 import com.template.telegramm.utillits.replaceFragment
 
 class RegisterActivity : AppCompatActivity() {
@@ -15,6 +16,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+        initFirebase()
     }
 
     override fun onStart() {

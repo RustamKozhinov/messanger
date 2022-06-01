@@ -2,12 +2,12 @@ package com.template.telegramm
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.google.firebase.auth.FirebaseAuth
 import com.template.telegramm.activities.RegisterActivity
 import com.template.telegramm.databinding.ActivityMainBinding
 import com.template.telegramm.ui.fragments.ChatsFragment
 import com.template.telegramm.ui.objects.AppDrawer
 import com.template.telegramm.utillits.AUTH
+import com.template.telegramm.utillits.initFirebase
 import com.template.telegramm.utillits.replaceActivity
 import com.template.telegramm.utillits.replaceFragment
 
@@ -43,11 +43,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer(this,mToolbar)
-        AUTH = FirebaseAuth.getInstance()
+        initFirebase()
     }
 }
 
