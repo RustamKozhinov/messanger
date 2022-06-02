@@ -27,6 +27,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         settings_phone_number.text = USER.phone
         settings_status.text = USER.status
         settings_user_name.text = USER.username
+        settings_btn_change_user_name.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
     }
 
     //create option menu
