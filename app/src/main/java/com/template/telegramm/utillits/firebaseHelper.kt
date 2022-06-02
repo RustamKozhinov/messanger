@@ -19,6 +19,7 @@ const val CHILD_USERNAME = "username"
 
 //когда мы хотим изменить имя и фамилию в поле EditText должно быть старое имя и фамилия которую мы возьмем из БД
 const val CHILD_FULLNAME = "fullname"
+const val CHILD_BIO = "bio"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()

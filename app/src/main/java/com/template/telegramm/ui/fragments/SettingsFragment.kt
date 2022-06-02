@@ -27,7 +27,10 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         settings_phone_number.text = USER.phone
         settings_status.text = USER.status
         settings_user_name.text = USER.username
+        //по клику переходим в ChangeUsernameFragment
         settings_btn_change_user_name.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
+        //по клику переходим в ChangeBioFragment
+        settings_btn_change_bio.setOnClickListener { replaceFragment(ChangeBioFragment()) }
     }
 
     //create option menu
