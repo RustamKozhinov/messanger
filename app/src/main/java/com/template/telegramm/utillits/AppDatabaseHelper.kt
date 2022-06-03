@@ -24,6 +24,7 @@ const val CHILD_ID = "id"
 const val CHILD_PHOTO_URL = "photoUrl"
 const val CHILD_PHONE = "phone"
 const val CHILD_USERNAME = "username"
+const val CHILD_STATE = "state"
 
 //когда мы хотим изменить имя и фамилию в поле EditText должно быть старое имя и фамилия которую мы возьмем из БД
 const val CHILD_FULLNAME = "fullname"

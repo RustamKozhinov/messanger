@@ -60,13 +60,7 @@ fun Fragment.replaceFragment(fragment: Fragment) {
         )?.commit()
 }
 
-//после того как мы в EditText ввели данные и сохранили клавиатура не закрывается автоматически в
-//этом методе мы это исправим
-fun hideKeyboard() {
-    val im: InputMethodManager =
-        APP_ACTIVITY.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    im.hideSoftInputFromWindow(APP_ACTIVITY.window.decorView.windowToken, 0)
-}
+
 
 //получение фото с помощью пикассо
 fun ImageView.downloadAndSetImage(url: String) {

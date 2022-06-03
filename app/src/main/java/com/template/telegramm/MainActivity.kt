@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
             replaceActivity(RegisterActivity())
         }
 
-
     }
 
     private fun initFields() {
@@ -48,6 +47,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        //когда мы запускаем приложение статус онлайн
+        AppStates.updateState(AppStates.ONLINE)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //когда мы закрываем приложение статус не в сети
+        AppStates.updateState(AppStates.OFFLINE)
+    }
 
 }
 

@@ -1,5 +1,7 @@
 package com.template.telegramm.ui.fragments
 
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import com.template.telegramm.R
 import com.template.telegramm.utillits.*
 import kotlinx.android.synthetic.main.fragment_change_username.*
@@ -16,7 +18,7 @@ class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_usern
 
     override fun onStop() {
         super.onStop()
-        APP_ACTIVITY.hideKeyboard()
+        hideKeyboard()
     }
 
     override fun change() {
@@ -45,6 +47,14 @@ class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_usern
                     updateCurrentUsername()
                 }
             }
+    }
+
+    //после того как мы в EditText ввели данные и сохранили клавиатура не закрывается автоматически в
+    //этом методе мы это исправим
+    fun hideKeyboard() {
+        val im: InputMethodManager =
+            APP_ACTIVITY.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        im.hideSoftInputFromWindow(APP_ACTIVITY.window.decorView.windowToken, 0)
     }
 
     private fun updateCurrentUsername() {
