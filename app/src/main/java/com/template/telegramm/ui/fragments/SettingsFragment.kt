@@ -47,7 +47,6 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     }
 
 
-
     //create option menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         activity?.menuInflater?.inflate(R.menu.settings_action_menu, menu)
@@ -83,6 +82,8 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
                         settings_user_photo.downloadAndSetImage(it)
                         showToast("Все обновлено!")
                         USER.photoUrl = it
+                        //обновляем аватарку в боковом меню
+                        APP_ACTIVITY.mAppDrawer.updateHeader()
                     }
                 }
             }

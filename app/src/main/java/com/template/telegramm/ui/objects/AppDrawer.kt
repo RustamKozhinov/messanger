@@ -1,6 +1,9 @@
 package com.template.telegramm.ui.objects
 
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -12,8 +15,12 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
+import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.template.telegramm.R
 import com.template.telegramm.ui.fragments.SettingsFragment
+import com.template.telegramm.utillits.USER
+import com.template.telegramm.utillits.downloadAndSetImage
 import com.template.telegramm.utillits.replaceFragment
 
 class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
@@ -21,8 +28,10 @@ class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
     private lateinit var mDrawer: Drawer
     private lateinit var mHeader: AccountHeader
     private lateinit var mDrawerLayout: DrawerLayout
+    private lateinit var mCurrentProfile: ProfileDrawerItem
 
     fun create() {
+        initLoader()
         createDrawer()
         createHeader()
         mDrawerLayout = mDrawer.drawerLayout
@@ -128,12 +137,36 @@ class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
     }
 
     private fun createHeader() {
+        mCurrentProfile = ProfileDrawerItem()
+            .withName(USER.fullname)
+            .withEmail(USER.phone)
+            .withIcon(USER.photoUrl)
+            .withIdentifier(200)
         mHeader = AccountHeaderBuilder()
             .withActivity(mainActivity)
             .withHeaderBackground(R.drawable.header)
             .addProfiles(
-                ProfileDrawerItem().withName("rustam")
-                    .withEmail("+79996138545")
+                mCurrentProfile
             ).build()
+    }
+
+    //функция которая будет обновлять шапку бокового меню
+    fun updateHeader() {
+        //заного обновили значения
+        mCurrentProfile
+            .withName(USER.fullname)
+            .withEmail(USER.phone)
+            .withIcon(USER.photoUrl)
+
+        //обращаемся к шапке
+        mHeader.updateProfile(mCurrentProfile)
+    }
+
+    private fun initLoader() {
+        DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
+            override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable) {
+                imageView.downloadAndSetImage(uri.toString())
+            }
+        })
     }
 }

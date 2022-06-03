@@ -36,6 +36,8 @@ class ChangeNameFragment : BaseChangeFragment(R.layout.fragment_change_name) {
                         showToast("Данные обновлены!")
                         //обновляем user
                         USER.fullname = fullname
+                        //обновляем шапку
+                        APP_ACTIVITY.mAppDrawer.updateHeader()
                         fragmentManager?.popBackStack()
                     }
                 }

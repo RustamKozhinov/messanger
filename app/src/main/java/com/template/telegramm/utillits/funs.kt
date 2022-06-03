@@ -3,17 +3,14 @@ package com.template.telegramm.utillits
 import android.content.Context
 import android.content.Intent
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
 import com.template.telegramm.MainActivity
 import com.template.telegramm.R
 import com.template.telegramm.activities.RegisterActivity
-import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.fragment_settings.*
-import kotlinx.android.synthetic.main.fragment_settings.view.*
 
 //функция позволяющая не писать Toast а заменить на вызов функции
 fun showToast(message: String) {
@@ -66,13 +63,16 @@ fun Fragment.replaceFragment(fragment: Fragment) {
 //после того как мы в EditText ввели данные и сохранили клавиатура не закрывается автоматически в
 //этом методе мы это исправим
 fun hideKeyboard() {
-    val im: InputMethodManager = APP_ACTIVITY.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    im.hideSoftInputFromWindow(APP_ACTIVITY.window.decorView.windowToken,0)
+    val im: InputMethodManager =
+        APP_ACTIVITY.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    im.hideSoftInputFromWindow(APP_ACTIVITY.window.decorView.windowToken, 0)
 }
+
 //получение фото с помощью пикассо
-fun CircleImageView.downloadAndSetImage(url: String) {
+fun ImageView.downloadAndSetImage(url: String) {
     Picasso.get()
         .load(url)
+        .fit()
         .placeholder(R.drawable.default_photo)
         .into(this)
 }
