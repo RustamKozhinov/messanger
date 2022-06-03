@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    //когда мы обрежем изображение для аватарки здесь мы заносим картивку в Firebase Storage
+    //Обрезаем фото и это должно отобразиться в Firebase Storage
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
@@ -70,9 +70,22 @@ class MainActivity : AppCompatActivity() {
             val uri = CropImage.getActivityResult(data).uri
             val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
                 .child(CURRENT_UID)
-            path.putFile(uri).addOnCompleteListener{
-                if (it.isSuccessful) {
-                    showToast("Данные Обновлены!")
+            //когда мы обрезали фото для автарки url адрес обрезаного фото загружается в БД в ветки Firebase Storage
+            path.putFile(uri).addOnCompleteListener { task1 ->
+                if (task1.isSuccessful) {
+                    path.downloadUrl.addOnCompleteListener { task2 ->
+                        if (task2.isSuccessful) {
+                            val photoUrl = task2.result.toString()
+                            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
+                                .child(CHILD_PHOTO_URL).setValue(photoUrl)
+                                .addOnCompleteListener {task3 ->
+                                    if (task3.isSuccessful) {
+                                        showToast("Все обновлено!")
+                                        USER.photoUrl = photoUrl
+                                    }
+                                }
+                        }
+                    }
                 }
             }
         }
