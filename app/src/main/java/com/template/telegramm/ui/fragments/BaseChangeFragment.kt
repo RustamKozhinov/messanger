@@ -7,23 +7,26 @@ import androidx.fragment.app.Fragment
 import com.template.telegramm.MainActivity
 import com.template.telegramm.R
 import com.template.telegramm.utillits.APP_ACTIVITY
+import com.template.telegramm.utillits.hideKeyboard
 
 open class BaseChangeFragment(layout: Int) : Fragment(layout) {
     override fun onStart() {
         super.onStart()
         setHasOptionsMenu(true)
-
         //когда запускается любой фрагмент
         // кроме ChatsFragment тогда запускается этот код и бургер отключается
         (APP_ACTIVITY).mAppDrawer.disableDrawer()
+        //отключает клавиатуру
+        hideKeyboard()
     }
 
     override fun onStop() {
         super.onStop()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        (APP_ACTIVITY).menuInflater.inflate(R.menu.settings_menu_confirm, menu)
+        APP_ACTIVITY.menuInflater.inflate(R.menu.settings_menu_confirm, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

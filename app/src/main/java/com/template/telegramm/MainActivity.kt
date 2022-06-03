@@ -24,10 +24,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-    }
-
-    override fun onStart() {
-        super.onStart()
         APP_ACTIVITY = this
         initFields()
         initFunc()
@@ -62,40 +58,7 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    //Обрезаем фото и это должно отобразиться в Firebase Storage
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
-            && resultCode == RESULT_OK && data != null) {
-            val uri = CropImage.getActivityResult(data).uri
-            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
-                .child(CURRENT_UID)
-            //когда мы обрезали фото для автарки url адрес обрезаного фото загружается в БД в ветки Firebase Storage
-            path.putFile(uri).addOnCompleteListener { task1 ->
-                if (task1.isSuccessful) {
-                    path.downloadUrl.addOnCompleteListener { task2 ->
-                        if (task2.isSuccessful) {
-                            val photoUrl = task2.result.toString()
-                            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
-                                .child(CHILD_PHOTO_URL).setValue(photoUrl)
-                                .addOnCompleteListener {task3 ->
-                                    if (task3.isSuccessful) {
-                                        showToast("Все обновлено!")
-                                        USER.photoUrl = photoUrl
-                                    }
-                                }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
-    //после того как мы в EditText ввели данные и сохранили клавиатура не закрывается автоматически в
-    //этом методе мы это исправим
-    fun hideKeyboard() {
-        val im:InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        im.hideSoftInputFromWindow(window.decorView.windowToken,0)
-    }
+
 }
 

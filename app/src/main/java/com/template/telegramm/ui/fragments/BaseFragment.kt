@@ -11,13 +11,13 @@ open class BaseFragment(layout: Int) : Fragment(layout) {
 
         //когда запускается любой фрагмент
         // кроме ChatsFragment тогда запускается этот код и бургер отключается
-        (APP_ACTIVITY).mAppDrawer.disableDrawer()
+        APP_ACTIVITY.mAppDrawer.disableDrawer()
 
     }
 
     override fun onStop() {
         super.onStop()
         //включаем бургер когда переходим во фрагмент чата
-        (APP_ACTIVITY).mAppDrawer.enableDrawer()
+        APP_ACTIVITY.mAppDrawer.enableDrawer()
     }
 }
