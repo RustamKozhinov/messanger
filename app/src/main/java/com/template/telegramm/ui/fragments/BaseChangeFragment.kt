@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.template.telegramm.MainActivity
 import com.template.telegramm.R
+import com.template.telegramm.utillits.APP_ACTIVITY
 
 open class BaseChangeFragment(layout: Int) : Fragment(layout) {
     override fun onStart() {
@@ -14,7 +15,7 @@ open class BaseChangeFragment(layout: Int) : Fragment(layout) {
 
         //когда запускается любой фрагмент
         // кроме ChatsFragment тогда запускается этот код и бургер отключается
-        (activity as MainActivity).mAppDrawer.disableDrawer()
+        (APP_ACTIVITY).mAppDrawer.disableDrawer()
     }
 
     override fun onStop() {
@@ -22,7 +23,7 @@ open class BaseChangeFragment(layout: Int) : Fragment(layout) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        (activity as MainActivity).menuInflater.inflate(R.menu.settings_menu_confirm, menu)
+        (APP_ACTIVITY).menuInflater.inflate(R.menu.settings_menu_confirm, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

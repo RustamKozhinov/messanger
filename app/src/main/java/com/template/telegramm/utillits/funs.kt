@@ -9,8 +9,8 @@ import com.template.telegramm.R
 import com.template.telegramm.activities.RegisterActivity
 
 //функция позволяющая не писать Toast а заменить на вызов функции
-fun Fragment.showToast(message: String) {
-    Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
+fun showToast(message: String) {
+    Toast.makeText(APP_ACTIVITY, message, Toast.LENGTH_SHORT).show()
 }
 
 //функция позваоляющая заменить написания Intent на вызов функции

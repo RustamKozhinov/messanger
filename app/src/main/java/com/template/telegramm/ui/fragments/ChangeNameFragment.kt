@@ -30,7 +30,7 @@ class ChangeNameFragment : BaseChangeFragment(R.layout.fragment_change_name) {
         } else {
             val fullname = "$name $surname"
             //далее обращаемся к БД firebase
-            REF_DATABASE_ROOT.child(NODE_USERS).child(UID).child(CHILD_FULLNAME)
+            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_FULLNAME)
                 .setValue(fullname).addOnCompleteListener {
                     if (it.isSuccessful) {
                         showToast("Данные обновлены!")
