@@ -5,8 +5,6 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
-import com.squareup.picasso.Picasso
 import com.template.telegramm.R
 import com.template.telegramm.activities.RegisterActivity
 import com.template.telegramm.utillits.*
@@ -36,6 +34,8 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         settings_btn_change_bio.setOnClickListener { replaceFragment(ChangeBioFragment()) }
         //при нажатии на кнопку мы можем устанавливать фото юзера
         settings_change_photo.setOnClickListener { changePhotoUser() }
+        //получаем аватарку
+        settings_user_photo.downloadAndSetImage(USER.photoUrl)
     }
 
     private fun changePhotoUser() {
@@ -73,27 +73,21 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
             val uri = CropImage.getActivityResult(data).uri//получаем uri
             val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
                 .child(CURRENT_UID)
+
+            //Функция высшего порядка
             //когда мы обрезали фото для автарки url адрес обрезаного фото загружается в БД в ветки Firebase Storage
-            path.putFile(uri).addOnCompleteListener { task1 ->
-                if (task1.isSuccessful) {
-                    path.downloadUrl.addOnCompleteListener { task2 ->
-                        if (task2.isSuccessful) {
-                            val photoUrl = task2.result.toString()
-                            //обращаемся к БД
-                            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
-                                .child(CHILD_PHOTO_URL).setValue(photoUrl)
-                                .addOnCompleteListener {task3 ->
-                                    if (task3.isSuccessful) {
-                                        //скачаем картинку из БД Firebase и установим в SettingsFragment
-                                        settings_user_photo.downloadAndSetImage(photoUrl)
-                                        showToast("Все обновлено!")
-                                        USER.photoUrl = photoUrl
-                                    }
-                                }
-                        }
+            putImageToStorage(uri, path) {
+                getUrlFromStorage(path) {
+                    putUrlToDatabase(it) {
+                        //скачаем картинку из БД Firebase и установим в SettingsFragment
+                        settings_user_photo.downloadAndSetImage(it)
+                        showToast("Все обновлено!")
+                        USER.photoUrl = it
                     }
                 }
             }
         }
     }
+
+
 }
