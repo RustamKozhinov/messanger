@@ -1,12 +1,16 @@
 package com.template.telegramm.utillits
 
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.net.Uri
+import android.provider.ContactsContract
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.template.telegramm.model.CommandModel
 import com.template.telegramm.model.User
 
 lateinit var AUTH: FirebaseAuth
@@ -70,6 +74,36 @@ inline fun initUser(crossinline function: () -> Unit) {
             }
             function()
         })
+}
+
+@SuppressLint("Range")
+fun initContacts() {
+    if (checkPermission(Manifest.permission.READ_CONTACTS)) {
+        var arrayContacts = arrayListOf<CommandModel>()
+        val cursor = APP_ACTIVITY.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null,
+        )
+        //пробегаемся по курсору и считываем все данные которые у нас есть в БД имя, номер телефона
+        cursor?.let {
+            while (it.moveToNext()) {
+                //считываем контакты с нашей телефонной книги
+                val fullname = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                val phone = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+
+                //данные которые мы считали записать в (model.CommandModel.kt)
+                val newModel = CommandModel()
+                newModel.fullname = fullname
+                newModel.phone = phone.replace(Regex("[\\$,-]"),"")
+                arrayContacts.add(newModel)
+            }
+        }
+        cursor?.close()
+
+    }
 }
 
 

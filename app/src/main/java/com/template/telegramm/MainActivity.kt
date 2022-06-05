@@ -11,10 +11,6 @@ import com.template.telegramm.databinding.ActivityMainBinding
 import com.template.telegramm.ui.fragments.ChatsFragment
 import com.template.telegramm.ui.objects.AppDrawer
 import com.template.telegramm.utillits.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,20 +25,15 @@ class MainActivity : AppCompatActivity() {
         APP_ACTIVITY = this
         initFirebase()
         initUser {
-            CoroutineScope(Dispatchers.IO).launch {
-                initContacts()
-            }
+
+            initContacts()
             initFields()
             initFunc()
         }
 
     }
 
-    private fun initContacts() {
-        if (com.template.telegramm.utillits.checkPermission(READ_CONTACTS)) {
-            showToast("чтение контактов")
-        }
-    }
+
 
     private fun initFunc() {
         //проверяет есть ли пользователь
