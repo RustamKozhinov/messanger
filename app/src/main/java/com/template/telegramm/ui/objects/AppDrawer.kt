@@ -4,8 +4,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
@@ -18,12 +16,14 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.template.telegramm.R
+import com.template.telegramm.ui.fragments.ContactsFragment
 import com.template.telegramm.ui.fragments.SettingsFragment
+import com.template.telegramm.utillits.APP_ACTIVITY
 import com.template.telegramm.utillits.USER
 import com.template.telegramm.utillits.downloadAndSetImage
 import com.template.telegramm.utillits.replaceFragment
 
-class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
+class AppDrawer() {
 
     private lateinit var mDrawer: Drawer
     private lateinit var mHeader: AccountHeader
@@ -40,19 +40,19 @@ class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
     //отключает боковое меню когда мы из главного фрагмента переходим в другой фрагмент
     fun disableDrawer() {
         mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false//выключаем гамургер
-        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)//включаем гамбургер
+        APP_ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(true)//включаем гамбургер
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)//устанавливает в каком режиме установить гамбургер
-        toolbar.setNavigationOnClickListener{
-            mainActivity.supportFragmentManager.popBackStack()
+        APP_ACTIVITY.mToolbar.setNavigationOnClickListener {
+            APP_ACTIVITY.supportFragmentManager.popBackStack()
         }
     }
 
     //включает боковое меню когда мы переходим из другого фрагмента в главный
     fun enableDrawer() {
-        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false) //включаем гамбургер
+        APP_ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(false) //включаем гамбургер
         mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = true //выключаем гамургер
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED) //устанавливает в каком режиме установить гамбургер
-        toolbar.setNavigationOnClickListener{
+        APP_ACTIVITY.mToolbar.setNavigationOnClickListener {
             mDrawer.openDrawer()
         }
     }
@@ -60,8 +60,8 @@ class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
     //Выдвежное меню,здесь создаем иконки и заголовки используя библиотеку mikepenz
     private fun createDrawer() {
         mDrawer = DrawerBuilder()
-            .withActivity(mainActivity)
-            .withToolbar(toolbar)
+            .withActivity(APP_ACTIVITY)
+            .withToolbar(APP_ACTIVITY.mToolbar)
             .withActionBarDrawerToggle(true)
             .withSelectedItem(-1)
             .withAccountHeader(mHeader)
@@ -127,13 +127,19 @@ class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
                 ): Boolean {
                     //переход по позиции, когда нажимаем на элемент он переходит к следующему фрагменту
                     //при нажатии кнопки назад переходит в предыдущий фрагмент
-                    when (position) {
-                        7 -> mainActivity.replaceFragment(SettingsFragment())
-                    }
+                    clickToItem(position)
                     return false
                 }
             }).build()
 
+    }
+
+    //при клике на позицию в боковом меню найстроек мы перенаправляемся на этот фрагмент
+    private fun clickToItem(position: Int) {
+        when (position) {
+            7 -> APP_ACTIVITY.replaceFragment(SettingsFragment())
+            4 -> APP_ACTIVITY.replaceFragment(ContactsFragment())
+        }
     }
 
     private fun createHeader() {
@@ -143,7 +149,7 @@ class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
             .withIcon(USER.photoUrl)
             .withIdentifier(200)
         mHeader = AccountHeaderBuilder()
-            .withActivity(mainActivity)
+            .withActivity(APP_ACTIVITY)
             .withHeaderBackground(R.drawable.header)
             .addProfiles(
                 mCurrentProfile
