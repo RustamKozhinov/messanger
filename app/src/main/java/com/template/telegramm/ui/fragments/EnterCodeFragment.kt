@@ -34,14 +34,20 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) : Fragment(R.l
                 dateMap[CHILD_PHONE] = mPhoneNumber
                 dateMap[CHILD_USERNAME] = uid
 
-                REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dateMap)
-                    .addOnCompleteListener { task2 ->
-                        if (task2.isSuccessful) {
-                            showToast("welcome")
-                            (APP_ACTIVITY).replaceActivity(MainActivity())
-                        } else showToast(task2.exception?.message.toString())
-                    }
+                //когда мы заканчиваем с регистрацией пользователя мы создаем новую НОДУ в firebase db
+                //и записываем туда номер телефона с номером пользователя
+                REF_DATABASE_ROOT.child(NODE_PHONES).child(mPhoneNumber).setValue(uid)
+                    .addOnFailureListener {
 
+                    }
+                    .addOnSuccessListener {
+                        REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dateMap)
+                            .addOnSuccessListener {
+                                showToast("welcome")
+                                (APP_ACTIVITY).replaceActivity(MainActivity())
+                            }
+                            .addOnFailureListener { showToast(it.message.toString()) }
+                    }
             }else {
                 showToast(it.exception?.message.toString())
             }

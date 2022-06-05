@@ -1,6 +1,5 @@
 package com.template.telegramm.utillits
 
-
 import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -23,6 +22,8 @@ const val FOLDER_PROFILE_IMAGE = "profile_image"
 
 const val NODE_USERS = "users"
 const val NODE_USERNAMES = "usernames"
+const val NODE_PHONES = "phones"
+const val NODE_PHONES_CONTACTS = "phone_contacts"
 
 const val CHILD_ID = "id"
 const val CHILD_PHOTO_URL = "photoUrl"
@@ -91,19 +92,39 @@ fun initContacts() {
         cursor?.let {
             while (it.moveToNext()) {
                 //считываем контакты с нашей телефонной книги
-                val fullname = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                val phone = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val fullname =
+                    it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                val phone =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
 
                 //данные которые мы считали записать в (model.CommandModel.kt)
                 val newModel = CommandModel()
                 newModel.fullname = fullname
-                newModel.phone = phone.replace(Regex("[\\$,-]"),"")
+                newModel.phone = phone.replace(Regex("[\\$,-]"), "")
                 arrayContacts.add(newModel)
             }
         }
         cursor?.close()
+        //после того как создали новую ноду которая после регистрации нового юзера записывает в БД
+        // номер телефона и имя
+        updatePhoneToDatabase(arrayContacts)
 
     }
+}
+
+fun updatePhoneToDatabase(arrayContacts: ArrayList<CommandModel>) {
+    REF_DATABASE_ROOT.child(NODE_PHONES).addListenerForSingleValueEvent(AppValueEventListener {
+        it.children.forEach { snapshot ->
+            arrayContacts.forEach { contact ->
+                if (snapshot.key == contact.phone) {
+                    REF_DATABASE_ROOT.child(NODE_PHONES_CONTACTS).child(CURRENT_UID)
+                        .child(snapshot.value.toString()).child(CHILD_ID)
+                        .setValue(snapshot.value.toString())
+                        .addOnFailureListener { showToast(it.message.toString()) }
+                }
+            }
+        }
+    })
 }
 
 
