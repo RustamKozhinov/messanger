@@ -1,8 +1,11 @@
 package com.template.telegramm
 
+import android.Manifest.permission.READ_CONTACTS
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.template.telegramm.activities.RegisterActivity
 import com.template.telegramm.databinding.ActivityMainBinding
 import com.template.telegramm.ui.fragments.ChatsFragment
@@ -22,10 +25,17 @@ class MainActivity : AppCompatActivity() {
         APP_ACTIVITY = this
         initFirebase()
         initUser {
+            initContacts()
             initFields()
             initFunc()
         }
 
+    }
+
+    private fun initContacts() {
+        if (com.template.telegramm.utillits.checkPermission(READ_CONTACTS)) {
+            showToast("чтение контактов")
+        }
     }
 
     private fun initFunc() {
@@ -59,5 +69,16 @@ class MainActivity : AppCompatActivity() {
         AppStates.updateState(AppStates.OFFLINE)
     }
 
+    //создание окна где пользователь разрешает чтение контактов
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (ContextCompat.checkSelfPermission(APP_ACTIVITY, READ_CONTACT) == PackageManager.PERMISSION_GRANTED) {
+            initContacts()
+        }
+    }
 }
 
