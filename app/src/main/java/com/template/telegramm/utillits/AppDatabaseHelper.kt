@@ -10,12 +10,12 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.template.telegramm.model.CommandModel
-import com.template.telegramm.model.User
+import com.template.telegramm.model.CommonModel
+import com.template.telegramm.model.UserModel
 
 lateinit var AUTH: FirebaseAuth
 lateinit var REF_DATABASE_ROOT: DatabaseReference
-lateinit var USER: User
+lateinit var USER: UserModel
 lateinit var CURRENT_UID: String
 lateinit var REF_STORAGE_ROOT: StorageReference
 
@@ -39,7 +39,7 @@ const val CHILD_BIO = "bio"
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
     REF_DATABASE_ROOT = FirebaseDatabase.getInstance().reference
-    USER = User()
+    USER = UserModel()
     CURRENT_UID = AUTH.currentUser?.uid.toString()
     REF_STORAGE_ROOT = FirebaseStorage.getInstance().reference
 }
@@ -70,7 +70,7 @@ inline fun initUser(crossinline function: () -> Unit) {
     //обращаемся к БД
     REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
         .addListenerForSingleValueEvent(AppValueEventListener {
-            USER = it.getValue(User::class.java) ?: User()
+            USER = it.getValue(UserModel::class.java) ?: UserModel()
             if (USER.username.isEmpty()) {
                 USER.username = CURRENT_UID
             }
@@ -81,7 +81,7 @@ inline fun initUser(crossinline function: () -> Unit) {
 @SuppressLint("Range")
 fun initContacts() {
     if (checkPermission(Manifest.permission.READ_CONTACTS)) {
-        var arrayContacts = arrayListOf<CommandModel>()
+        var arrayContacts = arrayListOf<CommonModel>()
         val cursor = APP_ACTIVITY.contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null,
@@ -99,7 +99,7 @@ fun initContacts() {
                     it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
 
                 //данные которые мы считали записать в (model.CommandModel.kt)
-                val newModel = CommandModel()
+                val newModel = CommonModel()
                 newModel.fullname = fullname
                 newModel.phone = phone.replace(Regex("[\\$,-]"), "")
                 arrayContacts.add(newModel)
@@ -113,7 +113,7 @@ fun initContacts() {
     }
 }
 
-fun updatePhoneToDatabase(arrayContacts: ArrayList<CommandModel>) {
+fun updatePhoneToDatabase(arrayContacts: ArrayList<CommonModel>) {
     REF_DATABASE_ROOT.child(NODE_PHONES).addListenerForSingleValueEvent(AppValueEventListener {
         it.children.forEach { snapshot ->
             arrayContacts.forEach { contact ->
@@ -128,7 +128,10 @@ fun updatePhoneToDatabase(arrayContacts: ArrayList<CommandModel>) {
     })
 }
 
-fun DataSnapshot.getCommandModel(): CommandModel =
-    this.getValue(CommandModel::class.java) ?: CommandModel()
+//функция преобразовывает полученные данные из Firebase в модель CommonModel
+fun DataSnapshot.getCommonModel(): CommonModel =
+    this.getValue(CommonModel::class.java) ?: CommonModel()
 
 
+fun DataSnapshot.getUserModel(): UserModel =
+    this.getValue(UserModel::class.java) ?: UserModel()

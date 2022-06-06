@@ -9,7 +9,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseReference
 import com.template.telegramm.R
-import com.template.telegramm.model.CommandModel
+import com.template.telegramm.model.CommonModel
 import com.template.telegramm.utillits.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.contact_item.view.*
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_contacts.*
 class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
 
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mAdapter: FirebaseRecyclerAdapter<CommandModel, ContactsHolder>
+    private lateinit var mAdapter: FirebaseRecyclerAdapter<CommonModel, ContactsHolder>
     private lateinit var mRefContacts: DatabaseReference//ссылка откуда будем скачивать данные
     private lateinit var mRefUsers: DatabaseReference
     private lateinit var mRerUsersListener: AppValueEventListener
@@ -35,10 +35,10 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
         mRecyclerView = contacts_recycle_view
         mRefContacts = REF_DATABASE_ROOT.child(NODE_PHONES_CONTACTS).child(CURRENT_UID)
 
-        val options = FirebaseRecyclerOptions.Builder<CommandModel>()
-            .setQuery(mRefContacts, CommandModel::class.java)
+        val options = FirebaseRecyclerOptions.Builder<CommonModel>()
+            .setQuery(mRefContacts, CommonModel::class.java)
             .build()
-        mAdapter = object : FirebaseRecyclerAdapter<CommandModel, ContactsHolder>(options) {
+        mAdapter = object : FirebaseRecyclerAdapter<CommonModel, ContactsHolder>(options) {
 
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsHolder {
                 val view = LayoutInflater.from(parent.context)
@@ -49,13 +49,13 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
             override fun onBindViewHolder(
                 holder: ContactsHolder,
                 position: Int,
-                model: CommandModel
+                model: CommonModel
             ) {
                 mRefUsers = REF_DATABASE_ROOT.child(NODE_USERS).child(model.id)
 
                 mRerUsersListener = AppValueEventListener {
                     mRefUsers.addValueEventListener(AppValueEventListener {
-                        val contact = it.getCommandModel()
+                        val contact = it.getCommonModel()
                         holder.name.text = contact.fullname
                         holder.status.text = contact.state
                         holder.photo.downloadAndSetImage(contact.photoUrl)

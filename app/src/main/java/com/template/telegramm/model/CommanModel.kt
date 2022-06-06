@@ -1,6 +1,6 @@
 package com.template.telegramm.model
 
-data class CommandModel(
+data class CommonModel(
     val id: String = "",//id
     var username: String = "",// пользовательское имя
     var bio: String = "",//информация о пользователе
