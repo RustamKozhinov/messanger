@@ -10,6 +10,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseReference
 import com.template.telegramm.R
 import com.template.telegramm.model.CommandModel
+import com.template.telegramm.model.User
 import com.template.telegramm.utillits.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.contact_item.view.*
@@ -21,6 +22,8 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
     private lateinit var mAdapter: FirebaseRecyclerAdapter<CommandModel, ContactsHolder>
     private lateinit var mRefContacts: DatabaseReference//ссылка откуда будем скачивать данные
     private lateinit var mRefUsers: DatabaseReference
+    private lateinit var mRerUsersListener: AppValueEventListener
+    private lateinit var mapListeners: HashMap<DatabaseReference, AppValueEventListener>
 
     override fun onResume() {
         super.onResume()
@@ -50,12 +53,18 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                 model: CommandModel
             ) {
                 mRefUsers = REF_DATABASE_ROOT.child(NODE_USERS).child(model.id)
-                mRefUsers.addValueEventListener(AppValueEventListener {
-                    val contact = it.getCommandModel()
-                    holder.name.text = contact.fullname
-                    holder.status.text = contact.state
-                    holder.photo.downloadAndSetImage(contact.photoUrl)
-                })
+
+                mRerUsersListener = AppValueEventListener {
+                    mRefUsers.addValueEventListener(AppValueEventListener {
+                        val contact = it.getCommandModel()
+                        holder.name.text = contact.fullname
+                        holder.status.text = contact.state
+                        holder.photo.downloadAndSetImage(contact.photoUrl)
+                    })
+                    mRefUsers.addValueEventListener(mRerUsersListener)
+                    mapListeners[mRefUsers] = mRerUsersListener
+                }
+
 
             }
         }
@@ -73,6 +82,11 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
     override fun onPause() {
         super.onPause()
         mAdapter.stopListening()
+        println()
+        mapListeners.forEach{
+            it.key.removeEventListener(it.value)
+        }
+        println()
     }
 }
 
