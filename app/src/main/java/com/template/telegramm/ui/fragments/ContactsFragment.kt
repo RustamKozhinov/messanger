@@ -10,7 +10,6 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseReference
 import com.template.telegramm.R
 import com.template.telegramm.model.CommandModel
-import com.template.telegramm.model.User
 import com.template.telegramm.utillits.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.contact_item.view.*
@@ -60,6 +59,11 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                         holder.name.text = contact.fullname
                         holder.status.text = contact.state
                         holder.photo.downloadAndSetImage(contact.photoUrl)
+
+                        //установим на каждый контакт слушатель кликов
+                        holder.itemView.setOnClickListener {
+                            replaceFragment(SingleChatFragment(contact))
+                        }
                     })
                     mRefUsers.addValueEventListener(mRerUsersListener)
                     mapListeners[mRefUsers] = mRerUsersListener
