@@ -1,9 +1,6 @@
 package com.template.telegramm.utillits
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.net.Uri
-import android.provider.ContactsContract
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
@@ -78,54 +75,30 @@ inline fun initUser(crossinline function: () -> Unit) {
         })
 }
 
-@SuppressLint("Range")
-fun initContacts() {
-    if (checkPermission(Manifest.permission.READ_CONTACTS)) {
-        var arrayContacts = arrayListOf<CommonModel>()
-        val cursor = APP_ACTIVITY.contentResolver.query(
-            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-            null,
-            null,
-            null,
-            null,
-        )
-        //пробегаемся по курсору и считываем все данные которые у нас есть в БД имя, номер телефона
-        cursor?.let {
-            while (it.moveToNext()) {
-                //считываем контакты с нашей телефонной книги
-                val fullname =
-                    it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                val phone =
-                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
 
-                //данные которые мы считали записать в (model.CommandModel.kt)
-                val newModel = CommonModel()
-                newModel.fullname = fullname
-                newModel.phone = phone.replace(Regex("[\\$,-]"), "")
-                arrayContacts.add(newModel)
-            }
-        }
-        cursor?.close()
-        //после того как создали новую ноду которая после регистрации нового юзера записывает в БД
-        // номер телефона и имя
-        updatePhoneToDatabase(arrayContacts)
-
-    }
-}
 
 fun updatePhoneToDatabase(arrayContacts: ArrayList<CommonModel>) {
-    REF_DATABASE_ROOT.child(NODE_PHONES).addListenerForSingleValueEvent(AppValueEventListener {
-        it.children.forEach { snapshot ->
-            arrayContacts.forEach { contact ->
-                if (snapshot.key == contact.phone) {
-                    REF_DATABASE_ROOT.child(NODE_PHONES_CONTACTS).child(CURRENT_UID)
-                        .child(snapshot.value.toString()).child(CHILD_ID)
-                        .setValue(snapshot.value.toString())
-                        .addOnFailureListener { showToast(it.message.toString()) }
+    //функция добавляет номер телефона с id в БД
+    if (AUTH.currentUser != null) {
+        REF_DATABASE_ROOT.child(NODE_PHONES).addListenerForSingleValueEvent(AppValueEventListener {
+            it.children.forEach { snapshot ->
+                arrayContacts.forEach { contact ->
+                    if (snapshot.key == contact.phone) {
+                        REF_DATABASE_ROOT.child(NODE_PHONES_CONTACTS).child(CURRENT_UID)
+                            .child(snapshot.value.toString()).child(CHILD_ID)
+                            .setValue(snapshot.value.toString())
+                            .addOnFailureListener { showToast(it.message.toString()) }
+
+                        REF_DATABASE_ROOT.child(NODE_PHONES_CONTACTS).child(CURRENT_UID)
+                            .child(snapshot.value.toString()).child(CHILD_FULLNAME)
+                            .setValue(contact.fullname)
+                            .addOnFailureListener { showToast(it.message.toString()) }
+                    }
                 }
             }
-        }
-    })
+        })
+    }
+
 }
 
 //функция преобразовывает полученные данные из Firebase в модель CommonModel

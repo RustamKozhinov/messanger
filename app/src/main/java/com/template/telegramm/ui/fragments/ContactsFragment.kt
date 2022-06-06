@@ -56,13 +56,15 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                 mRerUsersListener = AppValueEventListener {
                     mRefUsers.addValueEventListener(AppValueEventListener {
                         val contact = it.getCommonModel()
-                        holder.name.text = contact.fullname
+                        if(contact.fullname.isEmpty()) {
+                            holder.name.text = model.fullname
+                        } else holder.name.text = contact.fullname
+
                         holder.status.text = contact.state
                         holder.photo.downloadAndSetImage(contact.photoUrl)
-
                         //установим на каждый контакт слушатель кликов
                         holder.itemView.setOnClickListener {
-                            replaceFragment(SingleChatFragment(contact))
+                            replaceFragment(SingleChatFragment(model))
                         }
                     })
                     mRefUsers.addValueEventListener(mRerUsersListener)

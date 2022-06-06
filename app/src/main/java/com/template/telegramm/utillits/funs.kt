@@ -1,8 +1,9 @@
 package com.template.telegramm.utillits
 
-import android.content.Context
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.view.inputmethod.InputMethodManager
+import android.provider.ContactsContract
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import com.squareup.picasso.Picasso
 import com.template.telegramm.MainActivity
 import com.template.telegramm.R
 import com.template.telegramm.activities.RegisterActivity
+import com.template.telegramm.model.CommonModel
 
 //функция позволяющая не писать Toast а заменить на вызов функции
 fun showToast(message: String) {
@@ -69,4 +71,39 @@ fun ImageView.downloadAndSetImage(url: String) {
         .fit()
         .placeholder(R.drawable.default_photo)
         .into(this)
+}
+
+@SuppressLint("Range")
+fun initContacts() {
+    if (checkPermission(Manifest.permission.READ_CONTACTS)) {
+        var arrayContacts = arrayListOf<CommonModel>()
+        val cursor = APP_ACTIVITY.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null,
+        )
+        //пробегаемся по курсору и считываем все данные которые у нас есть в БД имя, номер телефона
+        cursor?.let {
+            while (it.moveToNext()) {
+                //считываем контакты с нашей телефонной книги
+                val fullname =
+                    it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                val phone =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+
+                //данные которые мы считали записать в (model.CommandModel.kt)
+                val newModel = CommonModel()
+                newModel.fullname = fullname
+                newModel.phone = phone.replace(Regex("[\\$,-]"), "")
+                arrayContacts.add(newModel)
+            }
+        }
+        cursor?.close()
+        //после того как создали новую ноду которая после регистрации нового юзера записывает в БД
+        // номер телефона и имя
+        updatePhoneToDatabase(arrayContacts)
+
+    }
 }
