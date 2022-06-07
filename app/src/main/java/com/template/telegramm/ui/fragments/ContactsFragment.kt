@@ -10,6 +10,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseReference
 import com.template.telegramm.R
 import com.template.telegramm.model.CommonModel
+import com.template.telegramm.ui.fragments.single_chat.SingleChatFragment
 import com.template.telegramm.utillits.*
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.contact_item.view.*

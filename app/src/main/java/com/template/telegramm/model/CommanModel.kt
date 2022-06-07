@@ -7,5 +7,10 @@ data class CommonModel(
     var fullname: String = "",// имя + фамилия
     var state: String = "",//состояние (в сети, был недавно)
     var phone: String = "",//номер телефона
-    var photoUrl: String = "empty"//аватарка
+    var photoUrl: String = "empty",//аватарка
+
+    var text: String = "",
+    var type: String = "",
+    var from: String = "",
+    var timeStamp: Any = ""
 )

@@ -13,6 +13,8 @@ import com.template.telegramm.MainActivity
 import com.template.telegramm.R
 import com.template.telegramm.activities.RegisterActivity
 import com.template.telegramm.model.CommonModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 //функция позволяющая не писать Toast а заменить на вызов функции
 fun showToast(message: String) {
@@ -106,4 +108,12 @@ fun initContacts() {
         updatePhoneToDatabase(arrayContacts)
 
     }
+
+
+}
+
+fun String.asTime(): String {
+    val time = Date(this.toLong())
+    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return timeFormat.format(time)
 }
